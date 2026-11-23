@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Утро на даче — Childhood</title>
+<style>
+:root { color-scheme: dark; font-family: system-ui, sans-serif; --cream: #fff1d2; --dark: #252c20; }
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; background: #b9c9ae; color: var(--cream); }
+canvas { position: fixed; inset: 0; display: block; }
+[hidden] { display: none !important; }
+.start { position: fixed; z-index: 1; bottom: clamp(20px, 6vh, 64px); left: clamp(16px, 5vw, 82px); width: min(428px, calc(100vw - 32px)); padding: 26px 28px 24px; background: #262f22ef; border: 1px solid #a6a77b6b; border-radius: 10px; box-shadow: 0 10px 34px #1e251d37; }
+h1 { font: 500 clamp(32px, 5.4vw, 54px)/1 Georgia, serif; letter-spacing: -.047em; margin: 0 0 12px; }
+p { margin: 0; color: #e6dfc2; line-height: 1.45; font-size: 14px; }
+button { font: inherit; font-weight: 650; color: #26301f; background: #ebd8a8; border: 0; border-radius: 5px; cursor: pointer; padding: 10px 18px; margin: 20px 0 15px; }
+button:hover { background: #f9e6b9; }
+button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+.controls { color: #d1cbab; font-size: 11px; }
+.hint { z-index: 1; position: fixed; left: 50%; bottom: 8%; transform: translateX(-50%); color: var(--cream); background: #252c20ea; border: 1px solid #a6a77b80; border-radius: 6px; padding: 9px 14px; font-size: 14px; white-space: nowrap; }
+#combat-hud { position: fixed; z-index: 1; inset: 18px 18px auto; display: flex; justify-content: space-between; gap: 12px; pointer-events: none; }
+.status { width: min(166px, 42vw); padding: 9px 12px; background: #262f22e8; border: 1px solid #a6a77b60; border-radius: 7px; font-size: 12px; }
+.status label { display: block; margin-bottom: 4px; }
+.status small { display: block; color: #d7d2b3; margin-top: 2px; }
+progress { display: block; width: 100%; height: 6px; border: 0; border-radius: 3px; overflow: hidden; appearance: none; background: #4c523a; }
+progress::-webkit-progress-bar { background: #4c523a; }
+progress::-webkit-progress-value { background: #a0b875; }
+progress::-moz-progress-bar { background: #a0b875; }
+#opponent-health::-webkit-progress-value { background: #d49675; }
+#opponent-health::-moz-progress-bar { background: #d49675; }
+kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; border-radius: 3px; margin-right: 6px; font: 600 12px system-ui; }
+.crosshair { position: fixed; top: 50%; left: 50%; margin: -2px; width: 4px; height: 4px; border-radius: 100%; background: #ffeac8b0; pointer-events: none; }
+</style>
+</head>
+<body>
+<section class="start" id="start" aria-labelledby="title">
+  <h1 id="title">Утро на даче</h1>
+  <button id="play" type="button" disabled>Гулять</button>
+  <p class="controls" id="controls">WASD — идти · Shift — бег · C — присесть · Пробел — прыжок<br>F или ЛКМ — удар · E — подобрать / открыть · 1/2 — ладонь / палка · G — выбросить · Esc — пауза</p>
+</section>
+<div id="combat-hud" hidden>
+  <div class="status">
+    <label for="health">Здоровье</label><progress id="health" max="100" value="100"></progress>
+    <small id="equipped">Ладонь</small>
+  </div>
+  <div id="opponent" class="status" hidden>
+    <label for="opponent-health" id="opponent-name">Соперник</label><progress id="opponent-health" max="100" value="100"></progress>
+    <small id="opponent-vitals"></small>
+  </div>
+</div>
+<div class="hint" id="hint" hidden><kbd>E</kbd><span></span></div>
+<div class="crosshair" id="crosshair" hidden></div>
+<audio id="cry-audio" preload="auto" src="data:audio/wav;base64,@@CRY@@"></audio>
+<audio id="swat-audio" preload="auto" src="data:audio/wav;base64,@@SWAT@@"></audio>
+<script id="house-surfaces" type="application/octet-stream">@@HOUSE_SURFACES@@</script>
+<script id="auto-panels" type="application/octet-stream">@@AUTO_PANELS@@</script>
+<script id="layout" type="application/json">@@LAYOUT@@</script>
+<script id="mesh-data" type="application/octet-stream">@@MESHES@@</script>
+<!--
+@@THREE_LICENSE@@
+-->
+<script>
+@@THREE@@
+</script>
+<script>
+@@GAME@@
+</script>
+</body>
+</html>
