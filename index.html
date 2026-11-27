@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Утро на даче — Childhood</title>
 <link rel="icon" href="data:,">
-<link rel="preload" href="game.82868d9b1eb39543.js" as="script">
+<link rel="preload" href="game.0f42f0dbb2cb18e2.js" as="script">
 <style>
 :root { color-scheme: dark; font-family: system-ui, sans-serif; --cream: #fff1d2; --dark: #252c20; }
 * { box-sizing: border-box; }
@@ -62,9 +62,27 @@ button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 .inventory { display: flex; flex-wrap: wrap; gap: 2px 8px; color: #d7d2b3; margin-top: 4px; font-size: 10px; }
 .inventory span { white-space: nowrap; }
 .inventory .selected-item { color: #fff1d2; text-decoration: underline; text-underline-offset: 2px; }
-#throw-charge { grid-column: 2; grid-row: 1; width: min(184px, 45vw); text-align: center; }
+#center-status { grid-column: 2; grid-row: 1; display: grid; justify-items: center; gap: 7px; }
+#throw-charge { width: min(184px, 45vw); text-align: center; }
 #opponent { grid-column: 3; grid-row: 1; justify-self: end; }
-@media (max-width: 620px) { #throw-charge { grid-column: 1 / -1; grid-row: 2; justify-self: center; } }
+#stomach-status { width: min(198px, calc(100vw - 36px)); }
+.stomach-header { display: flex; align-items: center; gap: 7px; }
+.stomach-header label { margin: 0; }
+.stomach-icon { position: relative; display: inline-block; width: 16px; height: 12px; margin: 2px 1px 3px 0; color: #d3bf87; }
+.stomach-icon::before { position: absolute; inset: 0 0 0 3px; content: ""; background: currentColor; border-radius: 56% 61% 51% 35%; transform: rotate(-29deg); }
+.stomach-icon::after { position: absolute; left: 5px; top: -3px; width: 5px; height: 14px; border: solid currentColor; border-width: 0 0 3px 3px; border-radius: 0 0 0 60%; transform: rotate(-25deg); content: ""; }
+#stomach-value { margin-left: auto; color: #d8c998; font-variant-numeric: tabular-nums; }
+#stomach-fullness { margin-top: 4px; }
+.stomach-action { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+.stomach-action kbd { margin: 0; padding: 1px 5px; font-size: 11px; }
+#stomach-time { margin-left: auto; font-variant-numeric: tabular-nums; }
+#stomach-status.urgent { background: #562821f5; border-color: #ed9675; }
+.urgent .stomach-icon, .urgent #stomach-value, .urgent #stomach-time { color: #ffd0ae; }
+.urgent .stomach-action kbd { background: #ffae87; border-color: #ffcfad; color: #3e1d17; }
+.urgent #stomach-fullness::-webkit-progress-value { background: #f08b6c; }
+.urgent #stomach-fullness::-moz-progress-bar { background: #f08b6c; }
+#stomach-message { margin-top: 5px; }
+@media (max-width: 620px) { #center-status { grid-column: 1 / -1; grid-row: 2; justify-self: center; } }
 progress { display: block; width: 100%; height: 6px; border: 0; border-radius: 3px; overflow: hidden; appearance: none; background: #4c523a; }
 progress::-webkit-progress-bar { background: #4c523a; }
 progress::-webkit-progress-value { background: #a0b875; }
@@ -95,7 +113,7 @@ kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; bord
     <a id="loading-site" class="launch-link" href="https://raphickie.github.io/childhood/" hidden>Играть на GitHub Pages</a>
   </div>
   <button id="play" type="button" disabled hidden>Гулять</button>
-  <p class="controls" id="controls" hidden>WASD — идти · Shift — бег, частые нажатия ускоряют · C — ползти / встать · Пробел — прыжок<br>ПКМ (удерживать стоя) — вид от первого лица · F или ЛКМ — удар · E — взаимодействие · 1 — кулак · 2 — палка · 3 — яблоко / камень / гриб · 4 — букет · G — сбросить · Удерживай T и отпусти для броска · Esc — пауза</p>
+  <p class="controls" id="controls" hidden>WASD — идти · Shift — бег, частые нажатия ускоряют · C — ползти / встать · Пробел — прыжок<br>ПКМ (удерживать стоя) — вид от первого лица · F или ЛКМ — удар · E — взаимодействие · 1 — кулак · 2 — палка · 3 — яблоко / камень / гриб · 4 — букет · G — сбросить · Удерживай T и отпусти для броска · V — поесть · X — сходить в туалет · Esc — пауза</p>
   <noscript><style>#loading { display: none; }</style><p>Включи JavaScript, чтобы запустить игру.</p></noscript>
 </section>
 <div id="combat-hud" hidden>
@@ -112,9 +130,22 @@ kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; bord
       <span>Грибы <b id="mushroom-count">0</b></span>
     </div>
   </div>
-  <div id="throw-charge" class="status" hidden>
-    <label for="throw-distance">Бросок · <span id="throw-value"></span></label>
-    <progress id="throw-distance" max="1" value="0"></progress>
+  <div id="center-status">
+    <div id="stomach-status" class="status" hidden>
+      <div class="stomach-header">
+        <span class="stomach-icon" aria-hidden="true"></span>
+        <label for="stomach-fullness">Желудок</label>
+        <span id="stomach-value">0 / 20</span>
+      </div>
+      <progress id="stomach-fullness" max="20" value="0"></progress>
+      <div id="stomach-eat" class="stomach-action" hidden><kbd>V</kbd><span id="stomach-eat-label"></span></div>
+      <div id="stomach-toilet" class="stomach-action" hidden><kbd>X</kbd><span>В туалет</span><strong id="stomach-time" hidden></strong></div>
+      <small id="stomach-message" role="status" hidden></small>
+    </div>
+    <div id="throw-charge" class="status" hidden>
+      <label for="throw-distance">Бросок · <span id="throw-value"></span></label>
+      <progress id="throw-distance" max="1" value="0"></progress>
+    </div>
   </div>
   <div id="opponent" class="status" hidden>
     <label for="opponent-health" id="opponent-name">Соперник</label><progress id="opponent-health" max="100" value="100"></progress>
@@ -265,6 +296,6 @@ async function loadPublishedGame(packUrl, packSize, runtimeUrl) {
 }
 
 </script>
-<script>loadPublishedGame("world.0c13ef47992b210c.bin", 10470955, "game.82868d9b1eb39543.js");</script>
+<script>loadPublishedGame("world.ab2f47765a07d7f3.bin", 10478175, "game.0f42f0dbb2cb18e2.js");</script>
 </body>
 </html>
