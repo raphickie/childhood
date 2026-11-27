@@ -13,8 +13,14 @@ body { margin: 0; min-height: 100vh; overflow: hidden; background: #b9c9ae; colo
 canvas { position: fixed; inset: 0; display: block; }
 [hidden] { display: none !important; }
 .start { position: fixed; z-index: 1; bottom: clamp(20px, 6vh, 64px); left: clamp(16px, 5vw, 82px); width: min(428px, calc(100vw - 32px)); padding: 26px 28px 24px; background: #262f22ef; border: 1px solid #a6a77b6b; border-radius: 10px; box-shadow: 0 10px 34px #1e251d37; }
-.start.is-loading { top: 50%; bottom: auto; left: 50%; transform: translate(-50%, -50%); }
-body:has(.is-loading) { background: radial-gradient(ellipse at 45% 35%, #53654a, #252e24); }
+.start.is-loading { --loading-side: clamp(20px, 4vw, 32px); top: 50%; bottom: auto; left: 50%; width: min(476px, calc(100vw - 32px)); padding: 26px var(--loading-side) 24px; overflow: hidden; transform: translate(-50%, -50%); background: #272f21; border-color: #a79f7480; border-radius: 14px; box-shadow: 0 24px 68px #131a12a0; }
+body:has(.is-loading) { background: radial-gradient(ellipse at 40% 30%, #596748 0%, #364433 53%, #232c23 100%); }
+.loading-illustration { position: relative; display: none; width: calc(100% + 2 * var(--loading-side)); aspect-ratio: 2.34; max-height: 42vh; margin: -26px calc(-1 * var(--loading-side)) 16px; background: #4c5540; }
+.is-loading .loading-illustration { display: block; }
+.loading-illustration img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-height: 480px) { .loading-illustration img { object-fit: contain; } }
+.loading-illustration::after { position: absolute; inset: auto 0 0; height: 25%; background: linear-gradient(transparent, #272f21); content: ""; pointer-events: none; }
+.is-loading h1 { font-size: clamp(33px, 5vw, 49px); }
 h1 { font: 500 clamp(32px, 5.4vw, 54px)/1 Georgia, serif; letter-spacing: -.047em; margin: 0 0 12px; }
 p { margin: 0; color: #e6dfc2; line-height: 1.45; font-size: 14px; }
 button { font: inherit; font-weight: 650; color: #26301f; background: #ebd8a8; border: 0; border-radius: 5px; cursor: pointer; padding: 10px 18px; margin: 20px 0 15px; }
@@ -26,13 +32,16 @@ button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 [data-build-template] #loading { display: none; }
 .launch-link { color: #ebd8a8; font-size: 14px; text-underline-offset: .16em; }
 #loading-site { display: inline-block; margin-top: 10px; }
-.loading-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 22px; color: #e6dfc2; font-size: 14px; }
-.loading-percent { color: #cfda9e; font-variant-numeric: tabular-nums; }
-#loading-progress { height: 7px; margin-top: 9px; }
-#loading-progress:indeterminate { background: #4c523a linear-gradient(90deg, transparent, #a0b875, transparent) 0 / 55% 100% no-repeat; animation: loading 1.5s ease-in-out infinite alternate; }
+.loading-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 18px; color: #e6dfc2; font-size: 14px; }
+.loading-percent { color: #efce90; font-size: 18px; font-weight: 650; font-variant-numeric: tabular-nums; }
+#loading-progress { height: 10px; margin-top: 8px; border: 1px solid #cab77e45; border-radius: 6px; background: #181f16; }
+#loading-progress::-webkit-progress-bar { background: transparent; }
+#loading-progress::-webkit-progress-value { border-radius: 5px; background: linear-gradient(90deg, #8fa35e, #ddba72); }
+#loading-progress::-moz-progress-bar { border-radius: 5px; background: linear-gradient(90deg, #8fa35e, #ddba72); }
+#loading-progress:indeterminate { background: #181f16 linear-gradient(90deg, transparent, #b1bb7c, transparent) 0 / 55% 100% no-repeat; animation: loading 1.5s ease-in-out infinite alternate; }
 #loading-progress:indeterminate::-webkit-progress-bar { background: transparent; }
 #loading-progress:indeterminate::-moz-progress-bar { background: transparent; }
-#loading-eta { min-height: 1.45em; margin-top: 9px; color: #c7c7a8; font-size: 12px; }
+#loading-eta { min-height: 1.45em; margin-top: 10px; color: #d0caad; font-size: 13px; }
 @keyframes loading { to { background-position: 100% 0; } }
 @media (prefers-reduced-motion: reduce) { #loading-progress:indeterminate { animation: none; } }
 .hint { z-index: 1; position: fixed; left: 50%; bottom: 8%; transform: translateX(-50%); color: var(--cream); background: #252c20ea; border: 1px solid #a6a77b80; border-radius: 6px; padding: 9px 14px; font-size: 14px; white-space: nowrap; }
@@ -71,6 +80,7 @@ kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; bord
 </head>
 <body>
 <section class="start is-loading" id="start" aria-labelledby="title">
+  <div class="loading-illustration" aria-hidden="true"><img src="loading.63030e9868cf0950.webp" alt="" decoding="async"></div>
   <h1 id="title">Утро на даче</h1>
   <div id="template-notice">
     <p>Здесь шаблон сборки. Игру можно открыть с диска или на сайте.</p>
