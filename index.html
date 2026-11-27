@@ -21,6 +21,11 @@ button { font: inherit; font-weight: 650; color: #26301f; background: #ebd8a8; b
 button:hover { background: #f9e6b9; }
 button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 .controls { color: #d1cbab; font-size: 11px; }
+#template-notice { display: none; margin-top: 18px; }
+[data-build-template] #template-notice { display: grid; gap: 10px; }
+[data-build-template] #loading { display: none; }
+.launch-link { color: #ebd8a8; font-size: 14px; text-underline-offset: .16em; }
+#loading-site { display: inline-block; margin-top: 10px; }
 .loading-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 22px; color: #e6dfc2; font-size: 14px; }
 .loading-percent { color: #cfda9e; font-variant-numeric: tabular-nums; }
 #loading-progress { height: 7px; margin-top: 9px; }
@@ -67,11 +72,17 @@ kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; bord
 <body>
 <section class="start is-loading" id="start" aria-labelledby="title">
   <h1 id="title">Утро на даче</h1>
+  <div id="template-notice">
+    <p>Здесь шаблон сборки. Игру можно открыть с диска или на сайте.</p>
+    <a class="launch-link" href="./childhood.local.html">Играть с диска</a>
+    <a class="launch-link" href="https://raphickie.github.io/childhood/">Играть на GitHub Pages</a>
+  </div>
   <div id="loading">
     <div class="loading-row"><span id="loading-phase" role="status">Подготовка игры…</span><span id="loading-percent" class="loading-percent" aria-hidden="true"></span></div>
     <progress id="loading-progress" aria-label="Ход загрузки" max="100"></progress>
     <p id="loading-eta"></p>
     <button id="loading-retry" type="button" hidden>Попробовать снова</button>
+    <a id="loading-site" class="launch-link" href="https://raphickie.github.io/childhood/" hidden>Играть на GitHub Pages</a>
   </div>
   <button id="play" type="button" disabled hidden>Гулять</button>
   <p class="controls" id="controls" hidden>WASD — идти · Shift — бег, частые нажатия ускоряют · C — ползти / встать · Пробел — прыжок<br>ПКМ (удерживать стоя) — вид от первого лица · F или ЛКМ — удар · E — взаимодействие · 1 — кулак · 2 — палка · 3 — яблоко / камень / гриб · 4 — букет · G — сбросить · Удерживай T и отпусти для броска · Esc — пауза</p>
@@ -147,6 +158,12 @@ const gameLoading = (() => {
         retry.hidden = false;
     }
 
+    function openOnSite() {
+        phase.textContent = "Эта версия запускается на GitHub Pages.";
+        progress.hidden = eta.hidden = true;
+        document.querySelector("#loading-site").hidden = false;
+    }
+
     // Let the browser show the phase before mesh decoding or the first WebGL render.
     function paint() {
         return new Promise(resolve => {
@@ -158,7 +175,7 @@ const gameLoading = (() => {
         });
     }
 
-    return {downloaded, preparing, ready, failed, paint};
+    return {downloaded, preparing, ready, failed, openOnSite, paint};
 })();
 
 async function fetchGamePack(url, expectedSize) {
@@ -215,6 +232,10 @@ async function unpackGameAssets(pack) {
 }
 
 async function loadPublishedGame(packUrl, packSize, runtimeUrl) {
+    if (location.protocol === "file:") {
+        gameLoading.openOnSite();
+        return;
+    }
     try {
         const pack = await fetchGamePack(packUrl, packSize);
         gameLoading.preparing();
