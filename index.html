@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Утро на даче — Childhood</title>
 <link rel="icon" href="data:,">
-<link rel="preload" href="game.e7fd06be29ef2e2b.js" as="script">
+<link rel="preload" href="game.8434b71a7a94b7da.js" as="script">
 <style>
 :root { color-scheme: dark; font-family: system-ui, sans-serif; --cream: #fff1d2; --dark: #252c20; }
 * { box-sizing: border-box; }
@@ -51,12 +51,13 @@ button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 .status small { display: block; color: #d7d2b3; margin-top: 2px; }
 #player-status { grid-column: 1; grid-row: 1; }
 .equipment { display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid #a6a77b40; margin-bottom: 8px; }
-.equipment-icon { flex: none; width: 56px; aspect-ratio: 4 / 3; background: #171f17 var(--equipment-icons, none) center top / 100% 600% no-repeat; border-radius: 4px; }
-.equipment[data-item="stick"] .equipment-icon { background-position-y: 20%; }
-.equipment[data-item="apple"] .equipment-icon { background-position-y: 40%; }
-.equipment[data-item="stone"] .equipment-icon { background-position-y: 60%; }
-.equipment[data-item="bloom"] .equipment-icon { background-position-y: 80%; }
-.equipment[data-item="mushroom"] .equipment-icon { background-position-y: 100%; }
+.equipment-icon { flex: none; width: 56px; aspect-ratio: 4 / 3; background: #171f17 var(--equipment-icons, none) center top / 100% auto no-repeat; border-radius: 4px; }
+.equipment[data-item="stick"] .equipment-icon { background-position-y: -42px; }
+.equipment[data-item="apple"] .equipment-icon { background-position-y: -84px; }
+.equipment[data-item="stone"] .equipment-icon { background-position-y: -126px; }
+.equipment[data-item="bloom"] .equipment-icon { background-position-y: -168px; }
+.equipment[data-item="mushroom"] .equipment-icon { background-position-y: -210px; }
+.equipment[data-item="tomato"] .equipment-icon { background-position-y: -252px; }
 .equipment-slot { display: block; color: #cfda9e; font: 700 22px/1 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
 #equipped { display: block; margin-top: 3px; font-size: 11px; font-weight: 600; }
 .inventory { display: flex; flex-wrap: wrap; gap: 2px 8px; color: #d7d2b3; margin-top: 4px; font-size: 10px; }
@@ -113,7 +114,7 @@ kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; bord
     <a id="loading-site" class="launch-link" href="https://raphickie.github.io/childhood/" hidden>Играть на GitHub Pages</a>
   </div>
   <button id="play" type="button" disabled hidden>Гулять</button>
-  <p class="controls" id="controls" hidden>WASD — идти · Shift — бег, частые нажатия ускоряют · C — ползти / встать · Пробел — прыжок<br>ПКМ (удерживать стоя) — вид от первого лица · F или ЛКМ — удар · E — взаимодействие · 1 — кулак · 2 — палка · 3 — яблоко / камень / гриб · 4 — букет · G — сбросить · Удерживай T и отпусти для броска · V — поесть · X — сходить в туалет · Esc — пауза</p>
+  <p class="controls" id="controls" hidden>WASD — идти · Shift — бег, частые нажатия ускоряют · C — ползти / встать · Пробел — прыжок<br>ПКМ (удерживать стоя) — вид от первого лица · F или ЛКМ — удар · E — взаимодействие · 1 — кулак · 2 — палка · 3 — яблоко / камень / гриб / помидор · 4 — букет · G — сбросить · Удерживай T и отпусти для броска · V — поесть · X — сходить в туалет · Esc — пауза</p>
   <noscript><style>#loading { display: none; }</style><p>Включи JavaScript, чтобы запустить игру.</p></noscript>
 </section>
 <div id="combat-hud" hidden>
@@ -128,6 +129,7 @@ kbd { display: inline-block; padding: 2px 6px; border: 1px solid #e5d5938a; bord
       <span>Камни <b id="pebble-count">0/7</b></span>
       <span>Цветы <b id="flower-count">0/5</b></span>
       <span>Грибы <b id="mushroom-count">0</b></span>
+      <span hidden>Помидоры <b id="tomato-count">0/5</b></span>
     </div>
   </div>
   <div id="center-status">
@@ -296,6 +298,6 @@ async function loadPublishedGame(packUrl, packSize, runtimeUrl) {
 }
 
 </script>
-<script>loadPublishedGame("world.0634f19a6de26af9.bin", 10926969, "game.e7fd06be29ef2e2b.js");</script>
+<script>loadPublishedGame("world.8e6809c380626025.bin", 11828088, "game.8434b71a7a94b7da.js");</script>
 </body>
 </html>
